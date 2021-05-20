@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132608307983680624</DateTime>
+  <GameVersion>0.2.2802.13893</GameVersion>
+  <Title>Advanced Furnace Control</Title>
+  <Description>Manual control of Advanced Furnace within a room.​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias furnace d0
+alias outputDial d1
+alias outputDisplay d2
+alias inputDial d3
+alias inputDisplay d4
+alias countDisplay d5
+
+alias inputSetting r0
+alias outputSetting r1
+alias reagentsCount r2
+
+main:
+jal getReadings
+jal printInfo
+jal manageSettings
+j main
+
+getReadings:
+l inputSetting inputDial Setting
+l outputSetting outputDial Setting
+l reagentsCount furnace Reagents
+j ra
+
+printInfo:
+s inputDisplay Setting inputSetting
+s outputDisplay Setting outputSetting
+s countDisplay Setting reagentsCount
+j ra
+
+manageSettings:
+s furnace SettingInput inputSetting
+s furnace SettingOutput outputSetting
+j ra</Instructions>
+</InstructionData>

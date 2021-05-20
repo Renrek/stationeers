@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132581342961719069</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Simple Temperature Control</Title>
+  <Description>Simple Gas Control, gas sensor input, batch wallcoolers out​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>#define Vars
+define WALLCOOLERS -739292323
+define TOKELVIN 273.15
+define ON 1
+define OFF 0
+
+#Devices
+alias gasSensor d0
+alias dial d1
+alias display d2
+#Memory
+alias CurrentTemp r0
+alias TargetTemp r1
+alias MaxTemp r2
+alias MinTemp r3
+
+main:
+jal configure
+ble CurrentTemp MinTemp turnoff
+bge CurrentTemp MaxTemp turnon
+j main
+
+
+configure:
+l TargetTemp dial Setting
+l CurrentTemp gasSensor Temperature
+sub CurrentTemp CurrentTemp TOKELVIN
+s display Setting TargetTemp
+add MaxTemp TargetTemp 0.9
+move MinTemp TargetTemp
+j ra
+turnoff:
+sb WALLCOOLERS On OFF
+j main
+
+turnon:
+sb WALLCOOLERS On ON
+j main</Instructions>
+</InstructionData>

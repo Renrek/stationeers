@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132610633072579730</DateTime>
+  <GameVersion>0.2.2802.13893</GameVersion>
+  <Title>t2</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias sorter d0
+alias dial d1
+alias stacker d2
+alias display d3
+
+alias dialSetting r1
+alias leverStatus r2
+alias oreType r3
+alias inputOre r4
+s sorter Mode 2
+main:
+
+l dialSetting dial Setting
+beqz dialSetting main
+jal getSetting
+s display Setting oreType
+#s display Setting oreType
+#s display Setting oreType
+#l leverStatus silo Open
+#beq leverStatus OFF main
+ls inputOre sorter 0 OccupantHash
+#l r1 Sorter Output
+# s db Setting r0
+# Set WhiteList
+bne inputOre oreType sendBack
+s sorter Output 1
+j main
+
+sendBack:
+s sorter Output 0
+
+j main
+
+getSetting:
+beq dialSetting 1 ice
+beq dialSetting 2 volatiles
+beq dialSetting 3 oxite
+beq dialSetting 4 coal
+beq dialSetting 5 copper
+beq dialSetting 6 iron
+beq dialSetting 7 nickel
+beq dialSetting 8 silicon
+beq dialSetting 9 uranium
+beq dialSetting 10 cobalt
+beq dialSetting 11 gold
+beq dialSetting 12 lead
+beq dialSetting 13 silver
+
+j main
+
+ice:
+move oreType 1217489948
+j ra
+
+volatiles:
+move oreType 1253102035
+j ra
+
+oxite:
+move oreType -1805394113
+j ra
+
+coal:
+move oreType 1724793494
+j ra
+
+copper:
+move oreType -707307845
+j ra
+
+iron:
+move oreType 1758427767
+j ra
+
+nickel:
+move oreType 1830218956
+j ra
+
+silicon:
+move oreType 1103972403
+j ra
+
+uranium:
+move oreType -1516581844
+j ra
+
+cobalt:
+move oreType -983091249
+j ra
+
+gold:
+move oreType -1348105509
+j ra
+
+lead:
+move oreType -190236170
+j ra
+
+silver:
+move oreType -916518678
+j ra</Instructions>
+</InstructionData>

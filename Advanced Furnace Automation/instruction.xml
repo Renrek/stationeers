@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132608310317097738</DateTime>
+  <GameVersion>0.2.2802.13893</GameVersion>
+  <Title>Advanced Furnace Automation</Title>
+  <Description>To assist in the management of the pressure and temp of furnace​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias furnace d0
+alias switch d1
+alias tempDial d2
+alias tempDisplay d3
+alias pressDial d4
+alias pressDisplay d5
+
+alias switchStatus r0
+alias currentTemp r1
+alias targetTemp r2
+alias currentPress r3
+alias targetPress r4
+
+define OFF 0
+define ON 1
+
+main:
+l switchStatus switch Setting
+beq switchStatus OFF systemIdle
+beq switchStatus ON systemRun
+j main
+
+systemRun:
+s tempDisplay On ON
+s pressDisplay On ON
+jal sensorInput
+jal displayInfo
+j main
+
+systemIdle:
+s tempDisplay On OFF
+s pressDisplay On OFF
+j main
+
+sensorInput:
+l currentTemp furnace Temperature
+l currentPress furnace Pressure
+l targetTemp tempDial Setting
+mul targetTemp targetTemp 100
+l targetPress pressDial Setting
+mul targetPress targetPress 500
+j ra
+
+displayInfo:
+s tempDisplay Setting targetTemp
+s pressDisplay Setting targetPress
+j ra</Instructions>
+</InstructionData>

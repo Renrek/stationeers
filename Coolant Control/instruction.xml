@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132591906431233354</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Coolant Control</Title>
+  <Description>​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias tank d0
+alias analyzer d1
+alias valve d2
+alias outsideSensor d3
+
+alias coolantTemp r0
+alias outsideTemp r2
+alias coolantTankTemp r3
+
+define ON 1
+define OFF 0
+
+main:
+jal checkTemperatures
+bltal coolantTemp outsideTemp closeValve
+bgtal coolantTemp outsideTemp openValve
+j main
+
+checkTemperatures:
+l outsideTemp outsideSensor Temperature
+l coolantTemp analyzer Temperature
+l coolantTankTemp tank Temperature
+j ra
+
+closeValve:
+s valve On OFF
+j ra
+
+openValve:
+s valve On ON
+j ra</Instructions>
+</InstructionData>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132593947515894669</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>temp bat</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINPRESSURE 5000
+define MAXPRESSURE 10000
+define VENTS -1129453144
+define OFF 0
+define ON 1
+define TOKELVIN 273.15
+
+alias dial d0
+alias display d1
+alias tank d2
+alias outsideSensor d3
+alias valve d4
+
+alias targetTemp r0
+alias outsideTemp r1
+alias tankTemp r2
+alias tankPressure r3
+alias tempStatus r4
+alias pressureStatus r5
+alias valveStatus r6
+alias ventStatus r8
+
+main:
+jal checkSensors
+bgtal tankTemp targetTemp lowerTemperature
+bltal tankTemp targetTemp raiseTemperature
+bgtal tankPressure MAXPRESSURE stopVents
+bltal tankPressure MINPRESSURE startVents
+j main
+
+checkSensors:
+l targetTemp dial Setting
+s display Setting targetTemp
+add targetTemp targetTemp TOKELVIN
+l outsideTemp outsideSensor Temperature
+l tankTemp tank Temperature
+l tankPressure tank Pressure
+j ra
+
+lowerTemperature:
+slt tempStatus outsideTemp tankTemp
+move valveStatus tempStatus
+slt pressureStatus tankPressure MAXPRESSURE
+add r14 tempStatus pressureStatus
+seq ventStatus r14 2
+s valve On tempStatus
+sb VENTS On ventStatus
+j ra
+
+raiseTemperature:
+sgt tempStatus outsideTemp tankTemp
+move valveStatus tempStatus
+slt pressureStatus tankPressure MAXPRESSURE
+add r14 tempStatus pressureStatus
+seq ventStatus r14 2
+s valve On tempStatus
+sb VENTS On ventStatus
+j ra
+
+stopVents:
+sb VENTS On OFF
+j ra
+
+startVents:
+sb VENTS On ON
+j ra</Instructions>
+</InstructionData>

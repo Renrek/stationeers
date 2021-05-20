@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132630148209442627</DateTime>
+  <GameVersion>0.2.2828.14046</GameVersion>
+  <Title>Temp Rocket</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>#Automated rocket controller script - CowsAreEvil
+
+alias command d0
+alias returnlever d1
+alias launchbutton d2
+alias display d3
+
+alias fuelLevel r1
+
+define LAUNCH 1
+define TRAVEL 2
+define WAITING 4
+define RETURN 5
+define HOME 6
+
+start:
+jal displayFuel
+yield
+l r0 launchbutton Setting
+beqz r0 start
+#button has been pressed
+s command Activate LAUNCH
+travel:
+jal displayFuel
+yield
+l r0 command Mode
+beq r0 TRAVEL travel
+#have arrived so activate collectors
+sb -1446002463 Activate 1
+sb 74521920 Activate 1
+sb -2027419821 Activate 1
+mine:
+jal displayFuel
+yield
+l r0 command Fuel
+ble r0 600 return
+l r0 returnlever Setting
+beq r0 1 return
+l r0 command CollectableGoods
+bnez r0 mine
+#finished mining
+s command Activate 0
+yield
+s command Activate TRAVEL
+j travel
+
+return:
+s command Activate RETURN
+
+j start
+
+displayFuel:
+l fuelLevel command Fuel
+s display Setting fuelLevel
+j ra</Instructions>
+</InstructionData>

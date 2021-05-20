@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132603464140583575</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Mars Waste Control</Title>
+  <Description>Control the temperture of waste gases by useing raidators, dump it into filteration when nessary.​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINPRESSURE 5000
+define MAXPRESSURE 10000
+define TOKELVIN 273.15
+
+alias dial d0
+alias display d1
+alias tank d2
+alias outsideSensor d3
+alias radiatorValve d4
+alias dumpValve d5
+
+alias targetTemp r0
+alias outsideTemp r1
+alias tankTemp r2
+alias tankPressure r3
+alias tempStatus r4
+alias pressureStatus r5
+alias radiatorStatus r6
+alias dumpStatus r7
+
+main:
+jal checkSensors
+bgtal tankTemp targetTemp lowerTemperature
+bltal tankTemp targetTemp raiseTemperature
+s radiatorValve On radiatorStatus
+seq dumpStatus tankTemp targetTemp
+s dumpValve On dumpStatus
+j main
+
+checkSensors:
+l targetTemp dial Setting
+s display Setting targetTemp
+add targetTemp targetTemp TOKELVIN
+l tankTemp tank Temperature
+l outsideTemp outsideSensor Temperature
+j ra
+
+lowerTemperature:
+slt radiatorStatus outsideTemp tankTemp
+j ra
+
+raiseTemperature:
+sgt radiatorStatus outsideTemp tankTemp
+j ra</Instructions>
+</InstructionData>

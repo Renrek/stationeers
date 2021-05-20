@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132603420032434949</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Mars Intake Control</Title>
+  <Description>Control the intake of atmo for Mars to have a stockpile of cool gas to regulate base temp​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINPRESSURE 5000
+define MAXPRESSURE 10000
+define VENTS -1129453144
+define TOKELVIN 273.15
+define GOOD 2 #two criteria need to be met
+
+alias tank d0
+alias outsideSensor d1
+
+alias tankPressure r0
+alias ventStatus r1
+alias outsideTemp r2
+alias pressureStatus r3
+alias tempStatus r4
+alias operationalCheck r5
+
+main:
+
+l outsideTemp outsideSensor Temperature
+sle tempStatus outsideTemp 233.15 #-40c
+l tankPressure tank Pressure
+slt pressureStatus tankPressure MAXPRESSURE
+add operationalCheck pressureStatus tempStatus
+seq ventStatus operationalCheck GOOD
+sb VENTS On ventStatus
+
+j main</Instructions>
+</InstructionData>

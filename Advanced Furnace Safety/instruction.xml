@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132608309406882985</DateTime>
+  <GameVersion>0.2.2802.13893</GameVersion>
+  <Title>Advanced Furnace Safety</Title>
+  <Description>Safety checker of furnace room​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias tank d0
+alias valve d1
+alias pump d2
+
+alias tankTemp r0
+alias tankPress r1
+
+define SOFTLIMIT 10000
+define HARDLIMIT 15000
+define ON 1
+define OFF 0
+
+main:
+jal checkSensors
+bge tankPress HARDLIMIT releasePressure
+bge tankPress SOFTLIMIT pumpTank
+s pump On OFF
+s valve On OFF
+j main
+
+checkSensors:
+l tankTemp tank Temperature
+l tankPress tank Pressure
+j ra
+
+pumpTank:
+s pump On ON
+j main
+
+releasePressure:
+s valve On ON
+j main</Instructions>
+</InstructionData>

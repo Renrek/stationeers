@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132592710888481683</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Waste-Coolant Balancer</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define TOKELVIN 273.15
+define ON 1
+define OFF 0
+
+alias airCon d0
+alias dial d1
+alias coolant d2
+alias waste d3
+
+alias targetTemp r0
+alias outsideTemp r1
+alias coolantTemp r2
+alias wasteTemp r3
+alias onStatus r4
+
+main:
+jal checkSensors
+bltal wasteTemp targetTemp startAC
+bgtal wasteTemp targetTemp stopAC
+j main
+
+checkSensors:
+l targetTemp dial Setting
+add targetTemp targetTemp TOKELVIN
+l coolantTemp coolant Temperature
+l wasteTemp waste Temperature
+j ra
+
+startAC:
+s airCon Open ON
+j ra
+
+stopAC:
+s airCon Open OFF
+j ra</Instructions>
+</InstructionData>

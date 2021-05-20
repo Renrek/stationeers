@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132585373825289217</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Filtration Manager</Title>
+  <Description>Basic Filteration Manager​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias filterUnit d0
+alias tank d1
+alias dumpValve d2
+alias diodeOne d3
+alias diodeTwo d4
+alias analyser d5
+
+alias onStatus r0
+alias tankPressure r1
+alias slotOneQuality r2
+alias slotTwoQuality r3
+alias slotOneType r4
+alias slotTwoType r5
+alias pipePressure r6
+alias pipeContents r7
+alias currentSlotType r8
+alias diodeLight r9
+alias valveOpen r10
+
+define off 0
+define on 1
+define slotOne 0
+define slotTwo 1
+define minFilter 0.1 #float 10%
+define maxPressure 15000 #kpa 5Mpa
+
+main:
+jal filterUnitCheck
+jal pipeCheck
+jal tankCheck
+jal filterTypeCheck
+move currentSlotType slotOneType
+jal checkAnalyzer
+move currentSlotType slotTwoType
+jal checkAnalyzer
+s filterUnit On onStatus
+s dumpValve On valveOpen
+j main
+
+tankCheck:
+l tankPressure tank Pressure
+slt onStatus tankPressure maxPressure
+sge valveOpen tankPressure maxPressure
+j ra
+
+filterUnitCheck:
+ls slotOneQuality filterUnit slotOne Quantity
+div slotOneQuality slotOneQuality 100 #make %
+s diodeOne Setting slotOneQuality
+move diodeLight off
+slt diodeLight slotOneQuality minFilter
+s diodeOne On diodeLight
+ls slotTwoQuality filterUnit slotTwo Quantity
+div slotTwoQuality slotTwoQuality 100 #make %
+s diodeTwo Setting slotTwoQuality
+move diodeLight off
+slt diodeLight slotTwoQuality minFilter
+s diodeTwo On diodeLight
+j ra
+
+filterTypeCheck:
+ls slotOneType filterUnit slotOne PrefabHash
+ls slotTwoType filterUnit slotTwo PrefabHash
+j ra
+
+pipeCheck:
+l pipePressure analyser Pressure
+beqz pipePressure main #restart if no pressure
+j ra
+
+checkAnalyzer:
+#small filters
+beq currentSlotType -721824748 checkOxygen
+beq currentSlotType 1635000764 checkCarbonDioxide
+beq currentSlotType 632853248 checkNitrogen
+beq currentSlotType 1915566057 checkPollutant
+beq currentSlotType -1247674305 checkNitrous
+beq currentSlotType 15011598 checkVolatiles
+j main #safeguard to start over
+
+checkVolatiles:
+l pipeContents analyser RatioVolatiles
+j checkVolume
+
+checkNitrous:
+l pipeContents analyser RatioNitrousOxide
+j checkVolume
+
+checkPollutant:
+l pipeContents analyser RatioPollutant
+j checkVolume
+
+checkOxygen:
+l pipeContents analyser RatioOxygen
+j checkVolume
+
+checkCarbonDioxide:
+l pipeContents analyser RatioCarbonDioxide
+j checkVolume
+
+checkNitrogen:
+l pipeContents analyser RatioNitrogen
+j checkVolume
+
+checkVolume:
+mul pipeContents pipeContents pipePressure
+sgt onStatus pipeContents 0.1
+j ra</Instructions>
+</InstructionData>

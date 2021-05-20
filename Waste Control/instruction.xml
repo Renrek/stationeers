@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132591919667176760</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Waste Control</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINPRESSURE 5000
+define MAXPRESSURE 10000
+define VENTS -1129453144
+define OFF 0
+define ON 1
+define TOKELVIN 273.15
+
+alias dial d0
+alias display d1
+alias tank d2
+alias outsideSensor d3
+alias valve d4
+
+alias targetTemp r0
+alias outsideTemp r1
+alias tankTemp r2
+alias tankPressure r3
+alias valveStatus r4
+
+main:
+jal checkSensors
+bgtal tankTemp targetTemp lowerTemperature
+bltal tankTemp targetTemp raiseTemperature
+bgtal tankPressure MAXPRESSURE stopVents
+bltal tankPressure MINPRESSURE startVents
+j main
+
+checkSensors:
+l targetTemp dial Setting
+s display Setting targetTemp
+add targetTemp targetTemp TOKELVIN
+l outsideTemp outsideSensor Temperature
+l tankTemp tank Temperature
+l tankPressure tank Pressure
+j ra
+
+lowerTemperature:
+slt valveStatus outsideTemp tankTemp
+s valve On valveStatus
+j ra
+
+raiseTemperature:
+sgt valveStatus outsideTemp tankTemp
+s valve On valveStatus
+j ra
+
+stopVents:
+sb VENTS On OFF
+j ra
+
+startVents:
+sb VENTS On ON
+j ra</Instructions>
+</InstructionData>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132565496458935657</DateTime>
+  <GameVersion>0.2.2724.13197</GameVersion>
+  <Title>Modified</Title>
+  <Description />
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias sensor d0
+alias vAngle r0
+alias hAngle r1
+
+# Panels have a 15 offset
+# Effective max panel angle (90-15 = 75)
+# Ratio caused by range (75+75 = 150/100)
+define hOffset 270
+define vOffset 75
+define vRatio 1.5
+define solarHash -539224550
+
+Start:
+yield
+
+# Setting horizontal (0-360 input)
+l hAngle sensor Horizontal
+sub hAngle hOffset hAngle
+sb solarHash Horizontal hAngle
+
+# Setting vertical (0-100% input)
+l vAngle sensor Vertical
+sub vAngle vOffset vAngle
+div vAngle vAngle vRatio
+sb solarHash Vertical vAngle
+
+j Start</Instructions>
+</InstructionData>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132603484043784696</DateTime>
+  <GameVersion>0.2.2768.13597</GameVersion>
+  <Title>Mars Coolant Control</Title>
+  <Description>Take coolant from stock tank, dump heated coolent to be filtered​</Description>
+  <Author>Renrek</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define TOKELVIN 273.15
+define PRESSURE 2000
+
+alias analyzer d0
+alias dumpPump d1
+alias intakePump d2
+alias dial d3
+
+alias coolantTemp r0
+alias coolantPressure r1
+alias dumpTemp r2
+alias dumpStatus r3
+alias intakeStatus r4
+
+main:
+jal checkSensors
+sge dumpStatus coolantTemp dumpTemp
+s dumpPump On dumpStatus
+slt intakeStatus coolantPressure PRESSURE
+s intakePump On intakeStatus
+j main
+
+checkSensors:
+l coolantPressure analyzer Pressure
+l coolantTemp analyzer Temperature
+l dumpTemp dial Setting
+add dumpTemp dumpTemp TOKELVIN
+j ra</Instructions>
+</InstructionData>
